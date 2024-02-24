@@ -1,7 +1,7 @@
 package com.htw.product.model;
 
 
-    import jakarta.persistence.*;
+import jakarta.persistence.*;
 
 
 @Entity

@@ -1,7 +1,5 @@
 package com.htw.product.dto;
 
-import com.htw.product.model.Product;
-
 public class ProductDto {
 
     private String name;
@@ -55,13 +53,5 @@ public class ProductDto {
     public void setInventory(int inventory) {
         this.inventory = inventory;
     }
-    // Convert ProductDto to Product entity if needed
-    private Product convertDtoToEntity(ProductDto productDto) {
-        Product product = new Product();
-        product.setName(productDto.getName());
-        product.setDescription(productDto.getDescription());
-        product.setPrice(productDto.getPrice());
-        product.setInventory(productDto.getInventory());
-        return product;
-    }
+
 }
