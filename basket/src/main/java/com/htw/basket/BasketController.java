@@ -1,0 +1,32 @@
+package com.htw.basket;
+
+import com.htw.basket.model.Basket;
+import com.htw.basket.model.Product;
+import com.htw.basket.service.impl.BasketService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpSession;
+
+@RestController
+public class BasketController {
+
+    @Autowired
+    private BasketService basketService;
+
+    @PostMapping("/basket/add")
+    public String addToBasket(@RequestBody Product product, HttpSession session) {
+        basketService.addToBasket(product, session);
+        return "Product with ID " + product.getId() + " added to basket.";
+    }
+
+    @GetMapping("/basket/view")
+    public Basket viewBasket(HttpSession session) {
+        return basketService.getBasket(session);
+    }
+
+    @DeleteMapping("/basket/remove")
+    public String removeFromBasket(@RequestBody Product product, HttpSession session) {
+        basketService.removeFromBasket(product, session);
+        return "Product with ID " + product.getId() + " removed from basket.";
+    }
+}
