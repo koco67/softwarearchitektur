@@ -1,21 +1,20 @@
 import React from 'react';
-import { FaShoppingBasket } from 'react-icons/fa';
-import './Home.css'
+import { Link } from 'react-router-dom';
 
-function Home() {
+function Home({ products }) {
   return (
-    <nav className="home">
-      <div className="nav-text">
-        <p>Home</p>
-      </div>
-      <div className="search-bar">
-        <input type="text" placeholder="Search..." />
-        <button>Search</button>
-      </div>
-      <div className="basket-icon">
-        <FaShoppingBasket />
-      </div>
-    </nav>
+    <div>
+      <h1>Pokemon Card Shop</h1>
+      <ul>
+        {products.map(product => (
+          <li key={product.id}>
+            <Link to={`/products/${product.id}`}>
+              {product.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

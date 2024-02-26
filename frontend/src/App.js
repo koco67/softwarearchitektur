@@ -1,33 +1,40 @@
 import './App.css';
-import React from './';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import Home from '../src/components/Home';
-import Product from '../src/components/Product';
-import Basket from '../src/components/Basket';
+import React, { useState, useEffect } from 'react';
+import { Route, Routes } from "react-router-dom";
+import Product from "./Components/Product";
+import Home from "./Components/Home";
 
 function App() {
-  return (
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/product">Product</Link>
-            </li>
-            <li>
-              <Link to="/about">About Us</Link>
-            </li>
-          </ul>
-        </nav>
+  const [products, setProducts] = useState([]);
 
-        <Route path="/" exact component={Home} />
-        <Route path="/product" component={Product} />
-        <Route path="/basket" component={Basket} />
-      </div>
-    </Router>
+  useEffect(() => {
+    fetch('/api/products')
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
+
+  return (
+    <Routes>
+      <Route path="Components" element={<Product />}/>
+      <Route path="Home" element={<Home />}/>
+      <Route path="/"/>
+    </Routes>
+    //<div>
+    //  <h1>Pokemon Card Shop</h1>
+    //  <ul>
+    //    {products.map((product, index) => (
+    //      <li key={index}>
+    //        <p>Name: {product.name}</p>
+    //        <p>Description: {product.description}</p>
+    //        <p>Price: {product.price}</p>
+    //        <p>Inventory: {product.inventory}</p>
+    //      </li>
+    //    ))}
+    //  </ul>
+    //</div>
   );
 }
 
