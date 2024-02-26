@@ -1,0 +1,11 @@
+.product-card {
+    background-color: lightgray;
+    width: 300px;
+    height: 100px;
+    margin: 16px;
+    border-radius: 8px;
+}
+
+.product-list {
+    display: flex;
+}

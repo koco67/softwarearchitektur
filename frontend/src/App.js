@@ -1,8 +1,8 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
-import Product from "./Components/Product";
-import Home from "./Components/Home";
+import Product from "./components/Product";
+import Home from "./components/Home";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -18,9 +18,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path="Components" element={<Product />}/>
-      <Route path="Home" element={<Home />}/>
-      <Route path="/"/>
+      <Route path="/Product/:productId" element={<Product/>} />
+      <Route path="/" exact element={<Home />} />
     </Routes>
     //<div>
     //  <h1>Pokemon Card Shop</h1>
