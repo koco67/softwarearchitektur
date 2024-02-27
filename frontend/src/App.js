@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
 import Product from "./components/Product";
 import Home from "./components/Home";
+import Basket from './components/Basket';
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -19,6 +20,7 @@ function App() {
   return (
     <Routes>
       <Route path="/Product/:productId" element={<Product/>} />
+      <Route path="/Basket" element={<Basket/>} />
       <Route path="/" exact element={<Home />} />
     </Routes>
     //<div>

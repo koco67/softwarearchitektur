@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "./Home.css";
+import Navbar from './Navbar';
 
 
 function Home() {
@@ -15,7 +16,7 @@ function Home() {
 
   return (
     <div>
-      <h1>Pokemon Card Shop</h1>
+      <Navbar />
       <ul className="product-list">
         {products.map(product => (
           <li key={product.id} className="product-card">

@@ -1,7 +1,11 @@
 .product-box {
     background-color: lightgray;
-    width: 800px;
-    height: 400px;
+    width: 650px;
+    height: 600px;
     border-radius: 8px;
     margin-left: 40px;
+    margin-top: 40px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
 }   
