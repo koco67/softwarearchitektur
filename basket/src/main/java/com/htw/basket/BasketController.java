@@ -29,4 +29,9 @@ public class BasketController {
         basketService.removeFromBasket(product, session);
         return "Product with ID " + product.getId() + " removed from basket.";
     }
+    @DeleteMapping("/basket/clear")
+    public String clearBasket(HttpSession session) {
+        basketService.clearBasket(session);
+        return "Basket cleared.";
+    }
 }

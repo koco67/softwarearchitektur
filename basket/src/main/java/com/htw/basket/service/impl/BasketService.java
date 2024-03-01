@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -52,5 +53,15 @@ public class BasketService implements IBasketservice {
         Basket newBasket = new Basket(sessionId);
         baskets.add(newBasket);
         return newBasket;
+    }
+    public void clearBasket(HttpSession session) {
+        String sessionId = session.getId();
+        Iterator<Basket> iterator = baskets.iterator();
+        while (iterator.hasNext()) {
+            Basket basket = iterator.next();
+            if (basket.getSessionId().equals(sessionId)) {
+                iterator.remove(); // Remove the basket associated with the session ID
+            }
+        }
     }
 }
