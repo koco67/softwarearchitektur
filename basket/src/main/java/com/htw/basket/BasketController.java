@@ -5,7 +5,7 @@ import com.htw.basket.model.Product;
 import com.htw.basket.service.impl.BasketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 public class BasketController {

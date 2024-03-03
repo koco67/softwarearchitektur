@@ -3,65 +3,67 @@ package com.htw.basket.service.impl;
 import com.htw.basket.model.Basket;
 import com.htw.basket.model.Product;
 import com.htw.basket.service.interfaces.IBasketservice;
-import com.htw.basket.service.interfaces.IProductRepository;
-import javax.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
 public class BasketService implements IBasketservice {
-    @Autowired
-    IProductRepository productRepository;
-    Basket basket;
-
-    public BasketService(IProductRepository productRepository) {
-        super();
-        this.productRepository = productRepository;
-    }
 
     // Simulating a database for storing baskets
     private List<Basket> baskets = new ArrayList<>();
 
     @Override
     public void addToBasket(Product product, HttpSession session) {
-        String sessionId = session.getId();
-        Basket basket = getOrCreateBasket(sessionId);
-        basket.addProduct(product);
+        if (product != null && session != null) {
+            String sessionId = session.getId();
+            Basket basket = getOrCreateBasket(sessionId);
+            basket.addProduct(product);
+        } else {
+            throw new IllegalArgumentException("Product and session cannot be null.");
+        }
     }
+
     @Override
     public Basket getBasket(HttpSession session) {
-        String sessionId = session.getId();
-        return getOrCreateBasket(sessionId);
+        if (session != null) {
+            String sessionId = session.getId();
+            return getOrCreateBasket(sessionId);
+        } else {
+            throw new IllegalArgumentException("Session cannot be null.");
+        }
     }
+
     @Override
     public void removeFromBasket(Product product, HttpSession session) {
-        String sessionId = session.getId();
-        Basket basket = getOrCreateBasket(sessionId);
-        basket.removeProduct(product);
+        if (product != null && session != null) {
+            String sessionId = session.getId();
+            Basket basket = getOrCreateBasket(sessionId);
+            basket.removeProduct(product);
+        } else {
+            throw new IllegalArgumentException("Product and session cannot be null.");
+        }
     }
 
     private Basket getOrCreateBasket(String sessionId) {
-        for (Basket basket : baskets) {
-            if (basket.getSessionId().equals(sessionId)) {
-                return basket;
-            }
-        }
-        Basket newBasket = new Basket(sessionId);
-        baskets.add(newBasket);
-        return newBasket;
+        return baskets.stream()
+                .filter(basket -> basket.getSessionId().equals(sessionId))
+                .findFirst()
+                .orElseGet(() -> {
+                    Basket newBasket = new Basket(sessionId);
+                    baskets.add(newBasket);
+                    return newBasket;
+                });
     }
+
     public void clearBasket(HttpSession session) {
-        String sessionId = session.getId();
-        Iterator<Basket> iterator = baskets.iterator();
-        while (iterator.hasNext()) {
-            Basket basket = iterator.next();
-            if (basket.getSessionId().equals(sessionId)) {
-                iterator.remove(); // Remove the basket associated with the session ID
-            }
+        if (session != null) {
+            String sessionId = session.getId();
+            baskets.removeIf(basket -> basket.getSessionId().equals(sessionId));
+        } else {
+            throw new IllegalArgumentException("Session cannot be null.");
         }
     }
 }
