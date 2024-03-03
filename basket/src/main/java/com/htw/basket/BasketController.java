@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.List;
+
 @RestController
 public class BasketController {
 
@@ -33,5 +35,9 @@ public class BasketController {
     public String clearBasket(HttpSession session) {
         basketService.clearBasket(session);
         return "Basket cleared.";
+    }
+    @GetMapping("/baskets")
+    public List<Basket> getAllBaskets() {
+        return basketService.getAllBaskets();
     }
 }

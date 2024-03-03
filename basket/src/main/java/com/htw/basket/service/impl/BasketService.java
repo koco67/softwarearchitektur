@@ -66,4 +66,7 @@ public class BasketService implements IBasketservice {
             throw new IllegalArgumentException("Session cannot be null.");
         }
     }
+    public List<Basket> getAllBaskets() {
+        return baskets;
+    }
 }
