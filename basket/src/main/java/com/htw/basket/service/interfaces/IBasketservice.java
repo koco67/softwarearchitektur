@@ -3,7 +3,7 @@ package com.htw.basket.service.interfaces;
 import com.htw.basket.model.Basket;
 import com.htw.basket.model.Product;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 public interface IBasketservice {
 
