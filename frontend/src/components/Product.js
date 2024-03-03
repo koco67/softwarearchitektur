@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import "./Product.css"
 import Navbar from "./Navbar";
+import addToBasket from "./basketService";
 
 const Product = () => {
 
@@ -25,6 +26,15 @@ const Product = () => {
       import(`../images/${selectedImage}`).then(imageModule => {
         setImageSrc(imageModule.default);
       });
+
+      const handleAddToBasket = async () => {
+        try {
+            await addToBasket(product);
+            console.log(`${product.name} added to basket.`);
+        } catch (error) {
+            console.error('Error adding product to basket:', error);
+        }
+      };
 
     return (
       <div>
@@ -52,7 +62,7 @@ const Product = () => {
             <br></br>
             <br></br>
             <br></br>
-            <button onClick={() => console.log(`${product.name} added to Basket`)}>
+            <button onClick={handleAddToBasket}>
               Add to Basket
             </button>
           </div>

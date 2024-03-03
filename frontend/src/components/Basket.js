@@ -22,6 +22,17 @@ const Basket = () => {
       });
   };
 
+  const addToBasket = async (product) => {
+    try {
+      await axios.post('/basket/add', product);
+      console.log(`${product.name} added to basket.`);
+      // Nach dem Hinzufügen eines Produkts den Warenkorb aktualisieren
+      fetchBasket();
+    } catch (error) {
+      console.error('Error adding product to basket:', error);
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
