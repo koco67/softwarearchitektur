@@ -30,10 +30,23 @@ public class BasketService implements IBasketservice {
     public Basket getBasket(HttpSession session) {
         if (session != null) {
             String sessionId = session.getId();
-            return getOrCreateBasket(sessionId);
+            Basket basket = findBasket(sessionId);
+            if (basket != null) {
+                return basket;
+            } else {
+                throw new IllegalStateException("Basket does not exist for the current session.");
+            }
         } else {
             throw new IllegalArgumentException("Session cannot be null.");
         }
+    }
+
+
+    private Basket findBasket(String sessionId) {
+        return baskets.stream()
+                .filter(basket -> basket.getSessionId().equals(sessionId))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
