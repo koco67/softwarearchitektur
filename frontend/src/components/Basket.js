@@ -2,13 +2,32 @@ import React, { useState, useEffect } from 'react';
 import Navbar from "./Navbar";
 
 const Basket = () => {
+
+  //function generateSessionId() {
+  //  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  //  const length = 32;
+  //  let sessionId = '';
+  //  for (let i = 0; i < length; i++) {
+  //    sessionId += characters.charAt(Math.floor(Math.random() * characters.length));
+  //  }
+  //  return sessionId;
+  //}
+  
+  //const sessionId = generateSessionId();
+
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     // Lade die Daten vom Server
-    fetch('http://localhost:8084/basket/view')
+    fetch('http://localhost:8084/basket/view', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -18,6 +37,7 @@ const Basket = () => {
       .then(data => {
         const { products } = data;
         setProducts(products);
+        console.log(data);
         setIsLoading(false);
       })
       .catch(error => {

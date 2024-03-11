@@ -2,12 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "./Home.css";
 import Navbar from './Navbar';
+import { useCookies } from 'react-cookie';
 
 
 function Home() {
   const [products, setProducts] = useState([]);
+  const [cookies, setCookie] = useCookies(['sessionID']);
 
   useEffect(() => {
+
+    if (!cookies.sessionID) {
+      // Set the 'visited' cookie with a value
+      setCookie('sessionID', '123', { path: '/' });
+    }
+
     fetch('/api/products')
       .then(response => response.json())
       .then(data => setProducts(data))

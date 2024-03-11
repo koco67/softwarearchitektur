@@ -2,33 +2,25 @@ import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import "./Product.css"
 import Navbar from "./Navbar";
-import addToBasket from "./basketService";
+import { useCookies } from 'react-cookie';
 
 const Product = () => {
 
-    const { productId } = useParams();
-    const [product, setProduct] = useState(null);
-    const [imageSrc, setImageSrc] = useState(null);
+    const { productId } = useParams(); //ID of the Pokemon-Card
+    const [product, setProduct] = useState(null); //This Variable will be set to the Pokemon-Cards Data
+    const [imageSrc, setImageSrc] = useState(null); //Setting the Image for th Pokemon-Card
+    const [cookies] = useCookies(['sessionID']);
 
-    const [formData, setFormData] = useState({
-      id: '',
-      price: ''
-    });
+    if(cookies.sessionID) {
+      console.log("wert des cookies: ", cookies.sessionID)
+    };
 
-    const [tempData, setTempData] = useState({
-      id: 'testId',
-      price: '12345678'
-    });
-
+    // GET-Product
     useEffect(() => {
         fetch(`/api/products/${productId}`)
           .then(response => response.json())
           .then(data => {
             setProduct(data);
-            setFormData({
-              id: data.id,
-              price: data.price
-            });
           })
           .catch(error => console.error('Error fetching product:', error));
       }, [productId]);
@@ -39,30 +31,28 @@ const Product = () => {
 
       const selectedImage = product.name+"_Card.jpg";
 
+      const itemToBasket = ({
+        name: product.name,
+        id: product.id,
+        price: product.price
+      });
+
       import(`../images/${selectedImage}`).then(imageModule => {
         setImageSrc(imageModule.default);
       });
 
-      const handleAddToBasket = async () => {
-        try {
-            await addToBasket(product);
-            console.log(`${product.name} added to basket.`);
-        } catch (error) {
-            console.error('Error adding product to basket:', error);
-        }
-      };
 
-    // POST-Request
+    // POST Product to Basket
     const postData = () => {
 
       fetch('http://localhost:8084/basket/add', {
         method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Origin': 'http://localhost:3000/',
-          'Access-Control-Request-Method': 'POST'
         },
-        body: JSON.stringify(tempData)
+        body: JSON.stringify(itemToBasket)
       })
       .then(response => {
         if (!response.ok) {
@@ -71,7 +61,7 @@ const Product = () => {
         return response.json();
       })
       .then(data => {
-        // Verarbeite die Antwort des Servers hier
+        console.log("test");
         console.log('Response from server:', data);
       })
       .catch(error => {
