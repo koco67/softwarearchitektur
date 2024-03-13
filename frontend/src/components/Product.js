@@ -17,7 +17,7 @@ const Product = () => {
 
     // GET-Product
     useEffect(() => {
-        fetch(`/api/products/${productId}`)
+        fetch(`http://localhost:8080/api/gateway/products/${productId}`)
           .then(response => response.json())
           .then(data => {
             setProduct(data);
