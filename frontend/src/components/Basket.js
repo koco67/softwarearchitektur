@@ -1,19 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from "./Navbar";
+import { Link } from 'react-router-dom';
 
 const Basket = () => {
-
-  //function generateSessionId() {
-  //  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  //  const length = 32;
-  //  let sessionId = '';
-  //  for (let i = 0; i < length; i++) {
-  //    sessionId += characters.charAt(Math.floor(Math.random() * characters.length));
-  //  }
-  //  return sessionId;
-  //}
-  
-  //const sessionId = generateSessionId();
 
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +42,7 @@ const Basket = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
   return (
     <div>
       <Navbar/>
@@ -64,6 +54,9 @@ const Basket = () => {
           </li>
         ))}
       </ul>
+      <Link to="/Checkout">
+        <button>Zur neuen Seite</button>
+      </Link>
     </div>
   );
 };

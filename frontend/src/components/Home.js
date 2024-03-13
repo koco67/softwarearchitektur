@@ -11,6 +11,7 @@ function Home() {
 
   useEffect(() => {
 
+    //Cookie is being set here
     if (!cookies.sessionID) {
       // Set the 'visited' cookie with a value
       setCookie('sessionID', '123', { path: '/' });
@@ -29,6 +30,7 @@ function Home() {
         {products.map(product => (
           <li key={product.id} className="product-card">
             <Link to={`/Product/${product.id}`}>{product.name}</Link>
+            <img src={`${process.env.PUBLIC_URL}/publicImages/${product.name}_Card.jpg`} alt={product.name} />
           </li>
         ))}
       </ul>
