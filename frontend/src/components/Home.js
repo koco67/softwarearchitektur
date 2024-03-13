@@ -16,7 +16,7 @@ function Home() {
       setCookie('sessionID', '123', { path: '/' });
     }
 
-    fetch('/api/products')
+    fetch('http://localhost:8080/api/gateway/products')
       .then(response => response.json())
       .then(data => setProducts(data))
       .catch(error => console.error('Error fetching products:', error));
