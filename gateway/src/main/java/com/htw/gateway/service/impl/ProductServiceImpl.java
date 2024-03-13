@@ -6,7 +6,10 @@ import com.htw.gateway.service.ProductService;
 import com.htw.gateway.error.ErrorResponseException;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -70,6 +73,9 @@ public class ProductServiceImpl implements ProductService{
                 productServiceRoutingKey,
                 message
         );
+        if (receivedMessageIsError(receivedMessage)) {
+                throw new ErrorResponseException("couldn't receive components");
+            }
         return new Gson().fromJson(
                 new String(receivedMessage.getBody(), StandardCharsets.UTF_8),
                 ProductDto.class
@@ -78,7 +84,18 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public DefaultProduct updateProduct(Long productId, ProductDto updatedProduct) {
-        var message = new Message(new Gson().toJson(updatedProduct).getBytes());
+        // Create a map to hold productId and updatedProduct
+        Map<String, Object> messageMap = new HashMap<>();
+        messageMap.put("productId", productId);
+        messageMap.put("updatedProduct", updatedProduct);
+
+        // Convert the map to JSON
+        String jsonMessage = new Gson().toJson(messageMap);
+
+        // Create the message with the JSON payload
+        var message = new Message(jsonMessage.getBytes());
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println(message);
         setMessageType(message, UPDATE_PRODUCT.name());
         var receivedMessage = rabbitTemplate.sendAndReceive(
                 directExchange.getName(),
@@ -100,6 +117,9 @@ public class ProductServiceImpl implements ProductService{
                 productServiceRoutingKey,
                 message
         );
+        if (receivedMessageIsError(receivedMessage)) {
+                throw new ErrorResponseException("couldn't receive components");
+            }
         return new Gson().fromJson(
                 new String(receivedMessage.getBody(), StandardCharsets.UTF_8),
                 DefaultProduct.class

@@ -6,10 +6,13 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.ErrorResponseException;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.htw.product.entity.MessageType;
 import com.htw.product.model.Product;
 import com.htw.product.service.ProductService;
+import com.google.gson.JsonParser;
 
 public class Listener {
 
@@ -18,7 +21,7 @@ public class Listener {
 
     @RabbitListener(queues = "${queue-names.product-service}")
     public String handleRequest(Message message) {
-        System.out.print("handle request ");
+
         final MessageType messageType;
         try {
             messageType = MessageType.valueOf(message.getMessageProperties().getType());
@@ -33,8 +36,6 @@ public class Listener {
                     return getProductById(productId);
                 }
                 case GET_ALL_PRODUCTS: {
-                    System.out.print("in case ");
-
                     return getAllProducts();
                 }
                 case DELETE_PRODUCT: {
@@ -46,8 +47,9 @@ public class Listener {
                     return createProduct(product);
                 }
                 case UPDATE_PRODUCT: {
-                    Product product = extractProductFrom(message);
-                    long productId = extractProductIdFrom(message);
+                    System.out.println(message);
+                    Long productId = extractProductIdFromUpdate(message);
+                    Product product = extractProductFromUpdate(message);
                     return updateProduct(productId, product);
                 }
                 default: {
@@ -63,14 +65,26 @@ public class Listener {
         return "errorResponse";
     }
 
-    private long extractProductIdFrom(Message message) {
+    private Long extractProductIdFrom(Message message) {
         return Long.parseLong(getBodyFrom(message));
     }
-
+    
     private Product extractProductFrom(Message message) {
         return new Gson().fromJson(getBodyFrom(message), Product.class);
     }
 
+    private Long extractProductIdFromUpdate(Message message) {
+        String jsonMessage = new String(message.getBody(), StandardCharsets.UTF_8);
+        JsonObject jsonObject = JsonParser.parseString(jsonMessage).getAsJsonObject();
+        return jsonObject.getAsJsonPrimitive("productId").getAsLong();
+    }
+    
+    private Product extractProductFromUpdate(Message message) {
+        String jsonMessage = new String(message.getBody(), StandardCharsets.UTF_8);
+        JsonObject jsonObject = JsonParser.parseString(jsonMessage).getAsJsonObject();
+        JsonObject productJson = jsonObject.getAsJsonObject("updatedProduct");
+        return new Gson().fromJson(productJson, Product.class);
+    }
     private String getBodyFrom(Message message) {
         return new String(message.getBody(), StandardCharsets.UTF_8);
     }
@@ -79,7 +93,7 @@ public class Listener {
         return errorResponse();
     }
 
-    private String updateProduct(long productId,Product product) throws ErrorResponseException {
+    private String updateProduct(long productId, Product product) throws ErrorResponseException {
         return new Gson().toJson(productService.updateProduct(productId, product));
     }
 
@@ -89,17 +103,15 @@ public class Listener {
 
     private String deleteProductById(long productId) throws ErrorResponseException {
         productService.deleteProduct(productId);
-        return "deleted";
+        return "{\"message\": \"Product deleted successfully\"}";
     }
 
     private String getAllProducts() {
-        System.out.print("in method get all products ");
         return new Gson().toJson(productService.getAllProducts());
     }
 
     private String getProductById(long productId) {
         return new Gson().toJson(productService.getProductById(productId));
     }
-
-
+    
 }
