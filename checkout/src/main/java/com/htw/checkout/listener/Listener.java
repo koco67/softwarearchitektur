@@ -1,4 +1,4 @@
-package com.htw.product.listener;
+package com.htw.checkout.listener;
 
 import java.nio.charset.StandardCharsets;
 
@@ -9,17 +9,17 @@ import org.springframework.web.ErrorResponseException;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.htw.product.entity.MessageType;
-import com.htw.product.model.Product;
-import com.htw.product.service.ProductService;
+import com.htw.checkout.entity.BasketItem;
+import com.htw.checkout.entity.MessageType;
+import com.htw.checkout.service.CheckoutService;
 import com.google.gson.JsonParser;
 
 public class Listener {
 
     @Autowired
-    private ProductService productService;
+    private CheckoutService checkoutService;
 
-    @RabbitListener(queues = "${queue-names.product-service}")
+    @RabbitListener(queues = "${queue-names.checkout-service}")
     public String handleRequest(Message message) {
 
         final MessageType messageType;
@@ -31,26 +31,9 @@ public class Listener {
 
         try {
             switch (messageType) {
-                case GET_PRODUCT_BY_ID: {
-                    long productId = extractProductIdFrom(message);
+                case CALCULATE_TOTAL: {
+                    BasketItem basket = extractBasketFrom(message);
                     return getProductById(productId);
-                }
-                case GET_ALL_PRODUCTS: {
-                    return getAllProducts();
-                }
-                case DELETE_PRODUCT: {
-                    long productId = extractProductIdFrom(message);
-                    return deleteProductById(productId);
-                }
-                case CREATE_PRODUCT: {
-                    Product product = extractProductFrom(message);
-                    return createProduct(product);
-                }
-                case UPDATE_PRODUCT: {
-                    System.out.println(message);
-                    Long productId = extractProductIdFromUpdate(message);
-                    Product product = extractProductFromUpdate(message);
-                    return updateProduct(productId, product);
                 }
                 default: {
                     return errorResponse();
@@ -65,26 +48,12 @@ public class Listener {
         return "errorResponse";
     }
 
-    private Long extractProductIdFrom(Message message) {
-        return Long.parseLong(getBodyFrom(message));
-    }
-    
-    private Product extractProductFrom(Message message) {
-        return new Gson().fromJson(getBodyFrom(message), Product.class);
-    }
-
-    private Long extractProductIdFromUpdate(Message message) {
+    private BasketItem extractBasketFrom(Message message) {
         String jsonMessage = new String(message.getBody(), StandardCharsets.UTF_8);
         JsonObject jsonObject = JsonParser.parseString(jsonMessage).getAsJsonObject();
         return jsonObject.getAsJsonPrimitive("productId").getAsLong();
     }
     
-    private Product extractProductFromUpdate(Message message) {
-        String jsonMessage = new String(message.getBody(), StandardCharsets.UTF_8);
-        JsonObject jsonObject = JsonParser.parseString(jsonMessage).getAsJsonObject();
-        JsonObject productJson = jsonObject.getAsJsonObject("updatedProduct");
-        return new Gson().fromJson(productJson, Product.class);
-    }
     private String getBodyFrom(Message message) {
         return new String(message.getBody(), StandardCharsets.UTF_8);
     }
@@ -93,25 +62,8 @@ public class Listener {
         return errorResponse();
     }
 
-    private String updateProduct(long productId, Product product) throws ErrorResponseException {
-        return new Gson().toJson(productService.updateProduct(productId, product));
-    }
-
-    private String createProduct(Product product) throws ErrorResponseException {
-        return new Gson().toJson(productService.createProduct(product));
-    }
-
-    private String deleteProductById(long productId) throws ErrorResponseException {
-        productService.deleteProduct(productId);
-        return "{\"message\": \"Product deleted successfully\"}";
-    }
-
-    private String getAllProducts() {
-        return new Gson().toJson(productService.getAllProducts());
-    }
-
-    private String getProductById(long productId) {
-        return new Gson().toJson(productService.getProductById(productId));
+    private String getProductById(BasketItem basket) {
+        return new Gson().toJson(checkoutService.calculateTotal(basket));
     }
     
 }
