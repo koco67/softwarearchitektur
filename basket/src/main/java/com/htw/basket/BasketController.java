@@ -15,12 +15,14 @@ public class BasketController {
     @Autowired
     private BasketService basketService;
 
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")     //Temporary fix
     @PostMapping("/basket/add")
     public String addToBasket(@RequestBody Product product, HttpSession session) {
         basketService.addToBasket(product, session.getId());
         return "Product with ID " + product.getId() + " added to basket.";
     }
 
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")     //Temporary fix
     @GetMapping("/basket/view")
     public Basket viewBasket(HttpSession session) {
         return basketService.getBasket(session.getId());

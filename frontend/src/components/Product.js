@@ -8,7 +8,7 @@ const Product = () => {
 
     const { productId } = useParams(); //ID of the Pokemon-Card
     const [product, setProduct] = useState(null); //This Variable will be set to the Pokemon-Cards Data
-    const [imageSrc, setImageSrc] = useState(null); //Setting the Image for th Pokemon-Card
+    const [imageSrc, setImageSrc] = useState(null); //Setting the Image for the Pokemon-Card
     const [cookies] = useCookies(['sessionID']);
 
     if(cookies.sessionID) {
@@ -29,13 +29,13 @@ const Product = () => {
         return <div>Loading...</div>;
       };
 
-      const selectedImage = product.name+"_Card.jpg";
-
       const itemToBasket = ({
         name: product.name,
         id: product.id,
         price: product.price
       });
+
+      const selectedImage = product.name+"_Card.jpg";
 
       import(`../images/${selectedImage}`).then(imageModule => {
         setImageSrc(imageModule.default);
