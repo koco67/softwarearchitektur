@@ -16,21 +16,20 @@ public class BasketService implements IBasketservice {
     private List<Basket> baskets = new ArrayList<>();
 
     @Override
-    public void addToBasket(Product product, HttpSession session) {
+    public Basket addToBasket(Product product, String session) {
         if (product != null && session != null) {
-            String sessionId = session.getId();
-            Basket basket = getOrCreateBasket(sessionId);
+            Basket basket = getOrCreateBasket(session);
             basket.addProduct(product);
+            return basket;
         } else {
             throw new IllegalArgumentException("Product and session cannot be null.");
         }
     }
 
     @Override
-    public Basket getBasket(HttpSession session) {
+    public Basket getBasket(String session) {
         if (session != null) {
-            String sessionId = session.getId();
-            Basket basket = findBasket(sessionId);
+            Basket basket = findBasket(session);
             if (basket != null) {
                 return basket;
             } else {
@@ -50,11 +49,11 @@ public class BasketService implements IBasketservice {
     }
 
     @Override
-    public void removeFromBasket(Product product, HttpSession session) {
+    public Basket removeFromBasket(Product product, String session) {
         if (product != null && session != null) {
-            String sessionId = session.getId();
-            Basket basket = getOrCreateBasket(sessionId);
+            Basket basket = getOrCreateBasket(session);
             basket.removeProduct(product);
+            return basket;
         } else {
             throw new IllegalArgumentException("Product and session cannot be null.");
         }
@@ -71,14 +70,15 @@ public class BasketService implements IBasketservice {
                 });
     }
 
-    public void clearBasket(HttpSession session) {
+    public String clearBasket(String session) {
         if (session != null) {
-            String sessionId = session.getId();
-            baskets.removeIf(basket -> basket.getSessionId().equals(sessionId));
+            baskets.removeIf(basket -> basket.getSessionId().equals(session));
+            return "Basket successfully cleared ";
         } else {
             throw new IllegalArgumentException("Session cannot be null.");
         }
     }
+
     public List<Basket> getAllBaskets() {
         return baskets;
     }

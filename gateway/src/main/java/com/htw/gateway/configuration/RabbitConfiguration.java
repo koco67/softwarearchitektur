@@ -1,5 +1,6 @@
 package com.htw.gateway.configuration;
 
+import com.htw.gateway.service.impl.BasketServiceImpl;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
@@ -28,6 +29,12 @@ public class RabbitConfiguration {
     
     @Value("${queue-names.product-service}")
     private String productServiceQueueName;
+
+    @Value("${routing-keys.basket-service}")
+    private String basketServiceRoutingKey;
+
+    @Value("${queue-names.basket-service}")
+    private String basketServiceQueueName;
     
     @Bean
     public DirectExchange directExchange() {
@@ -40,13 +47,26 @@ public class RabbitConfiguration {
     }
 
     @Bean
+    public BasketServiceImpl basketService() {
+        return new BasketServiceImpl();
+    }
+
+    @Bean
     public Queue productServiceQueue() {
         return new Queue(productServiceQueueName);
+    }
+    @Bean
+    public Queue basketServiceQueue() {
+        return new Queue(basketServiceQueueName);
     }
 
     @Bean
     public Binding productServiceBinding(DirectExchange directExchange, Queue productServiceQueue) {
         return BindingBuilder.bind(productServiceQueue).to(directExchange).with(productServiceRoutingKey);
+    }
+    @Bean
+    public Binding basketServiceBinding(DirectExchange directExchange, Queue basketServiceQueue) {
+        return BindingBuilder.bind(basketServiceQueue).to(directExchange).with(basketServiceRoutingKey);
     }
 
     @Bean

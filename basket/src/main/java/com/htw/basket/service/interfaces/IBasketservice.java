@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface IBasketservice {
 
-    void addToBasket(Product product, HttpSession session);
-    Basket getBasket(HttpSession session);
-    void removeFromBasket(Product product, HttpSession session);
-    public void clearBasket(HttpSession session);
+    Basket addToBasket(Product product, String session);
+    Basket getBasket(String session);
+    Basket removeFromBasket(Product product, String session);
+    public String clearBasket(String session);
     public List<Basket> getAllBaskets();
 }

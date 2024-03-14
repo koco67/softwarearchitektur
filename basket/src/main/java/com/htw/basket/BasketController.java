@@ -17,23 +17,23 @@ public class BasketController {
 
     @PostMapping("/basket/add")
     public String addToBasket(@RequestBody Product product, HttpSession session) {
-        basketService.addToBasket(product, session);
+        basketService.addToBasket(product, session.getId());
         return "Product with ID " + product.getId() + " added to basket.";
     }
 
     @GetMapping("/basket/view")
     public Basket viewBasket(HttpSession session) {
-        return basketService.getBasket(session);
+        return basketService.getBasket(session.getId());
     }
 
     @DeleteMapping("/basket/remove")
     public String removeFromBasket(@RequestBody Product product, HttpSession session) {
-        basketService.removeFromBasket(product, session);
+        basketService.removeFromBasket(product, session.getId());
         return "Product with ID " + product.getId() + " removed from basket.";
     }
     @DeleteMapping("/basket/clear")
     public String clearBasket(HttpSession session) {
-        basketService.clearBasket(session);
+        basketService.clearBasket(session.getId());
         return "Basket cleared.";
     }
     @GetMapping("/baskets")
