@@ -17,13 +17,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/gateway")
 @CrossOrigin(origins = "http://localhost:3000")
 public class BasketController {
 
     private final BasketService basketService;
+    private String savedSessionId;
 
     @Autowired
     public BasketController(BasketService basketService) {
@@ -36,33 +36,36 @@ public class BasketController {
         return ResponseEntity.ok(baskets);
     }
 
-
     @PostMapping("/basket/add")
     public Mono<ResponseEntity<Basket>> addToBasket(@RequestBody DefaultProduct defaultProduct, ServerWebExchange exchange) {
         return exchange.getSession()
-                .map(session -> {
-                    Basket basket = basketService.addToBasket(defaultProduct, session.getId());
-                    return ResponseEntity.ok(basket);
+                .flatMap(session -> {
+                    if (savedSessionId == null) {
+                        savedSessionId = session.getId();
+                    }
+                    return Mono.just(savedSessionId);
+                })
+                .flatMap(sessionId -> {
+                    Basket basket = basketService.addToBasket(defaultProduct, sessionId);
+                    return Mono.just(ResponseEntity.ok(basket));
                 });
-}
-    
+    }    
 
     @GetMapping("/basket")
-    public ResponseEntity<Basket> getBasket(@RequestBody HttpSession session) {
-        Basket basket = basketService.getBasket(session.getId());
+    public ResponseEntity<Basket> getBasket() {
+        Basket basket = basketService.getBasket(savedSessionId);
         return ResponseEntity.ok(basket);
     }
 
     @PutMapping("/basket/clear")
-    public ResponseEntity<String> clearBasket(@RequestBody HttpSession session) {
-        String message = basketService.clearBasket(session.getId());
-        return ResponseEntity.ok(message);
+    public Mono<ResponseEntity<String>> clearBasket() {
+        String message = basketService.clearBasket(savedSessionId);
+        return Mono.just(ResponseEntity.ok(message));
     }
 
     @DeleteMapping("/basket/remove")
-    public ResponseEntity<Basket> removeFromBasket(@RequestBody DefaultProduct defaultProduct, HttpSession session) {
-        Basket basket = basketService.removeFromBasket(defaultProduct, session.getId());
-        return ResponseEntity.ok(basket);
+    public Mono<ResponseEntity<Basket>> removeFromBasket(@RequestBody DefaultProduct defaultProduct) {
+        Basket basket = basketService.removeFromBasket(defaultProduct, savedSessionId);
+        return Mono.just(ResponseEntity.ok(basket));
     }
-
 }

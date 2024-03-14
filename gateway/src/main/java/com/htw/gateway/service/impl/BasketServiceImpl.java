@@ -56,6 +56,9 @@ public class BasketServiceImpl implements BasketService {
                 basketServiceRoutingKey,
                 message
         );
+        if (receivedMessageIsError(receivedMessage)) {
+            throw new ErrorResponseException("couldn't receive components");
+            }
         return new Gson().fromJson(
                 new String(receivedMessage.getBody(), StandardCharsets.UTF_8),
                 Basket.class
