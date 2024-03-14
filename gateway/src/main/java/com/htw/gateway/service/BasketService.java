@@ -11,6 +11,6 @@ public interface BasketService {
     Basket addToBasket(DefaultProduct product, String session);
     Basket getBasket(String session);
     Basket removeFromBasket(DefaultProduct product, String session);
-    public String clearBasket(String session);
-    public List<Basket> getAllBaskets();
+    String clearBasket(String session);
+    List<Basket> getAllBaskets();
 }
