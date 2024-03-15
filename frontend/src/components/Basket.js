@@ -11,7 +11,7 @@ const Basket = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Lade die Daten vom Server
+    //GET-REQUEST
     fetch('http://localhost:8080/api/gateway/basket', {
       method: 'GET',
       mode: 'cors',
@@ -44,22 +44,22 @@ const Basket = () => {
     return <div>Error: {error.message}</div>;
   }
 
+  //1:Counter einführen
   const idCounts = products.reduce((acc, product) => {
-    acc[product.id] = (acc[product.id] || 0) + 1; // Inkrementiere den Counter für die ID oder initialisiere ihn auf 1, wenn die ID zum ersten Mal gefunden wird
+    acc[product.id] = (acc[product.id] || 0) + 1;
     return acc;
   }, {});
-
+  //2: Mock erstellen
   const updatedProducts = products.map(product => {
-      return { ...product, counter: idCounts[product.id] }; // Füge den Counter zum Produktobjekt hinzu
+      return { ...product, counter: idCounts[product.id] };
   });
-
+  //3: Duplikate entfernen
   const uniqueUpdatedProducts = updatedProducts.filter((product, index, self) =>
     index === self.findIndex((p) => (
         p.id === product.id
     ))
   );
-
-  console.log(uniqueUpdatedProducts);
+  //ERGEBNIS: uniqueUpdatedProducts enthält nun eine Kopie der Produkt-liste aus dem Basket OHNE Duplikate und MIT einer Counter der die Anzahl der jeweiligen ID enthält
 
   return (
     <div>
@@ -69,7 +69,7 @@ const Basket = () => {
         {uniqueUpdatedProducts.map(product => (
         <li key={product.id} className="product-card">
         <img src={`${process.env.PUBLIC_URL}/publicImages/${product.name}_Card.jpg`} alt={product.name} />
-        <BasketCounterSection counter={product.counter}/>
+        <BasketCounterSection currentProduct={product}/>
         </li>
       ))}
       </ul>

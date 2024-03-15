@@ -5,14 +5,9 @@ import Navbar from "./Navbar";
 
 const Product = () => {
 
-    const [showMessage, setShowMessage] = useState(false); //Confirms that you have added an item to the basket via click on "add to basket"
     const { productId } = useParams(); //ID of the Pokemon-Card
     const [product, setProduct] = useState(null); //This Variable will be set to the Pokemon-Cards Data
     const [imageSrc, setImageSrc] = useState(null); //Setting the Image for the Pokemon-Card
-
-    const addedMessage = () => {
-      setShowMessage(true);
-    };
 
     // GET-Product
     useEffect(() => {
@@ -59,7 +54,6 @@ const Product = () => {
         return response.json();
       })
       .then(data => {
-        console.log("test");
         console.log('Response from server:', data);
       })
       .catch(error => {
@@ -93,10 +87,9 @@ const Product = () => {
             <br></br>
             <br></br>
             <br></br>
-            <button onClick={() => { postData(); addedMessage(); }}>
+            <button onClick={postData}>
               Add to Basket
             </button>
-            {showMessage && <p>Nachricht, die angezeigt wird, wenn der Button geklickt wurde</p>}
           </div>
           <img src={imageSrc} alt="Beschreibung des Bildes" />
         </div>

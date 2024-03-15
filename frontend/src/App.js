@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Product from "./components/Product";
 import Home from "./components/Home";
 import Basket from './components/Basket';
+import Checkout from './components/Checkout';
 
 function App() {
   //const [products, setProducts] = useState([]);
@@ -21,6 +22,7 @@ function App() {
     <Routes>
       <Route path="/Product/:productId" element={<Product/>} />
       <Route path="/Basket" element={<Basket/>} />
+      <Route path="/Checkout" element={<Checkout/>} />
       <Route path="/" exact element={<Home />} />
     </Routes>
   );
