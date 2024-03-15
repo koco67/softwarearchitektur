@@ -32,8 +32,8 @@ public class Listener {
         try {
             switch (messageType) {
                 case CALCULATE_TOTAL: {
-                    BasketItem basket = extractBasketFrom(message);
-                    return getProductById(productId);
+                    BasketItem basket = extractBasketItem(message);
+                    return getProductById(basket);
                 }
                 default: {
                     return errorResponse();
@@ -48,11 +48,10 @@ public class Listener {
         return "errorResponse";
     }
 
-    private BasketItem extractBasketFrom(Message message) {
-        String jsonMessage = new String(message.getBody(), StandardCharsets.UTF_8);
-        JsonObject jsonObject = JsonParser.parseString(jsonMessage).getAsJsonObject();
-        return jsonObject.getAsJsonPrimitive("productId").getAsLong();
+    private BasketItem extractBasketItem(Message message) {
+        return new Gson().fromJson(getBodyFrom(message), BasketItem.class);
     }
+
     
     private String getBodyFrom(Message message) {
         return new String(message.getBody(), StandardCharsets.UTF_8);
