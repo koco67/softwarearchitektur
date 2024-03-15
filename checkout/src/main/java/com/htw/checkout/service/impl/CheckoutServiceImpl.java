@@ -19,6 +19,7 @@ public class CheckoutServiceImpl implements CheckoutService{
             }
             return totalPrice;
     }
+    @Override
     public String proceedToPayment(Payment payment) {
         //send Payment details to warehouse
         return "accepted Payment";
