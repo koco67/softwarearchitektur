@@ -2,17 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import "./Product.css"
 import Navbar from "./Navbar";
-import { useCookies } from 'react-cookie';
 
 const Product = () => {
 
+    const [showMessage, setShowMessage] = useState(false); //Confirms that you have added an item to the basket via click on "add to basket"
     const { productId } = useParams(); //ID of the Pokemon-Card
     const [product, setProduct] = useState(null); //This Variable will be set to the Pokemon-Cards Data
     const [imageSrc, setImageSrc] = useState(null); //Setting the Image for the Pokemon-Card
-    const [cookies] = useCookies(['sessionID']);
 
-    if(cookies.sessionID) {
-      console.log("wert des cookies: ", cookies.sessionID)
+    const addedMessage = () => {
+      setShowMessage(true);
     };
 
     // GET-Product
@@ -45,10 +44,9 @@ const Product = () => {
     // POST Product to Basket
     const postData = () => {
 
-      fetch('http://localhost:8084/basket/add', {
+      fetch('http://localhost:8080/api/gateway/basket/add', {
         method: 'POST',
         mode: 'cors',
-        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -95,9 +93,10 @@ const Product = () => {
             <br></br>
             <br></br>
             <br></br>
-            <button onClick={postData}>
+            <button onClick={() => { postData(); addedMessage(); }}>
               Add to Basket
             </button>
+            {showMessage && <p>Nachricht, die angezeigt wird, wenn der Button geklickt wurde</p>}
           </div>
           <img src={imageSrc} alt="Beschreibung des Bildes" />
         </div>

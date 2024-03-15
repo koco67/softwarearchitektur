@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from "./Navbar";
+import BasketCounterSection from "./BasketCounterSection";
 import { Link } from 'react-router-dom';
+import "./Basket.css";
 
 const Basket = () => {
 
@@ -10,9 +12,9 @@ const Basket = () => {
 
   useEffect(() => {
     // Lade die Daten vom Server
-    fetch('http://localhost:8084/basket/view', {
+    fetch('http://localhost:8080/api/gateway/basket', {
       method: 'GET',
-      credentials: 'include',
+      mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
       }
@@ -26,7 +28,6 @@ const Basket = () => {
       .then(data => {
         const { products } = data;
         setProducts(products);
-        console.log(data);
         setIsLoading(false);
       })
       .catch(error => {
@@ -43,22 +44,41 @@ const Basket = () => {
     return <div>Error: {error.message}</div>;
   }
 
+  const idCounts = products.reduce((acc, product) => {
+    acc[product.id] = (acc[product.id] || 0) + 1; // Inkrementiere den Counter für die ID oder initialisiere ihn auf 1, wenn die ID zum ersten Mal gefunden wird
+    return acc;
+  }, {});
+
+  const updatedProducts = products.map(product => {
+      return { ...product, counter: idCounts[product.id] }; // Füge den Counter zum Produktobjekt hinzu
+  });
+
+  const uniqueUpdatedProducts = updatedProducts.filter((product, index, self) =>
+    index === self.findIndex((p) => (
+        p.id === product.id
+    ))
+  );
+
+  console.log(uniqueUpdatedProducts);
+
   return (
     <div>
       <Navbar/>
-      <h2>Basket</h2>
-      <ul>
-        {products.map(product => (
-          <li key={product.id}>
-            ID: {product.id}, Price: {product.price}
-          </li>
-        ))}
+      <h2>Items within your Basket</h2>
+      <ul className="basket-product-list">
+        {uniqueUpdatedProducts.map(product => (
+        <li key={product.id} className="product-card">
+        <img src={`${process.env.PUBLIC_URL}/publicImages/${product.name}_Card.jpg`} alt={product.name} />
+        <BasketCounterSection counter={product.counter}/>
+        </li>
+      ))}
       </ul>
       <Link to="/Checkout">
-        <button>Zur neuen Seite</button>
+        <button>Proceed to Checkout</button>
       </Link>
     </div>
   );
 };
 
 export default Basket;
+

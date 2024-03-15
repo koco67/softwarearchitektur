@@ -30,6 +30,7 @@ function Home() {
         {products.map(product => (
           <li key={product.id} className="product-card">
             <Link to={`/Product/${product.id}`}>{product.name}</Link>
+            <p>{product.price}$</p>
             <img src={`${process.env.PUBLIC_URL}/publicImages/${product.name}_Card.jpg`} alt={product.name} />
           </li>
         ))}
