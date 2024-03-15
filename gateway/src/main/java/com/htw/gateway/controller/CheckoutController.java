@@ -22,7 +22,7 @@ public class CheckoutController {
     public CheckoutController(CheckoutService checkoutService) {this.checkoutService = checkoutService;
     }
 
-    @GetMapping("/checkout/total")
+    @PostMapping("/checkout/total")
     public ResponseEntity<Double> calculateTotal(@RequestBody Basket basket) {
         return ResponseEntity.ok(checkoutService.calculateTotal(basket));
     }
