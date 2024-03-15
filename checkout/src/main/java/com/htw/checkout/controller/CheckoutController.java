@@ -1,5 +1,7 @@
 package com.htw.checkout.controller;
 
+import com.htw.checkout.entity.BasketItem;
+import com.htw.checkout.entity.Payment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,14 +21,12 @@ public class CheckoutController {
     }
 
     @GetMapping("/total")
-    public ResponseEntity<Double> calculateTotal() {
-        double total = checkoutService.calculateTotal();
-        return ResponseEntity.ok(total);
+    public ResponseEntity<Double> calculateTotal(BasketItem basketItem) {
+        return ResponseEntity.ok(checkoutService.calculateTotal(basketItem));
     }
 
     @PostMapping("/payment")
-    public ResponseEntity<String> proceedToPayment() {
-        // Dummy payment logic
-        return ResponseEntity.ok("Proceeding to payment (dummy response)");
+    public ResponseEntity<String> proceedToPayment(Payment payment) {
+        return ResponseEntity.ok(checkoutService.proceedToPayment(payment));
     }
 }
