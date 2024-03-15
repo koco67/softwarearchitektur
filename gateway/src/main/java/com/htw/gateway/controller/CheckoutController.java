@@ -23,9 +23,10 @@ public class CheckoutController {
     }
 
     @GetMapping("/checkout/total")
-    public ResponseEntity<Double> calculateTotal(Basket basket) {
+    public ResponseEntity<Double> calculateTotal(@RequestBody Basket basket) {
         return ResponseEntity.ok(checkoutService.calculateTotal(basket));
     }
+    
 
     @PostMapping("/checkout/payment")
     public ResponseEntity<String> proceedToPayment(Payment payment) {
