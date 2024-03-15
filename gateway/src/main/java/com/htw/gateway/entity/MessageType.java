@@ -12,5 +12,6 @@ public enum MessageType {
     REMOVE_FROM_BASKET,
     ADD_TO_BASKET,
     CLEAR_BASKET,
-    
+    CALCULATE_TOTAL,
+    PROCEED_TO_PAYMENT
 }
