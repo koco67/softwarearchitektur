@@ -1,0 +1,7 @@
+.checkout-box {
+    height: 500px;
+    width: 800px;
+    background-color: lightgray;
+    margin: 16px;
+    border-radius: 8px;
+}
