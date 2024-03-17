@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  mysql-product:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: sql11686549
+      MYSQL_USER: sql11686549
+      MYSQL_PASSWORD: e9JNxGrzxE
+    volumes:
+      - mysql-product-data:/var/lib/mysql
+
+  gateway:
+    build: ./gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-product
+
+  product:
+    build: ./product
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql-product
+
+  checkout:
+    build: ./checkout
+    ports:
+      - "8083:8083"
+
+  basket:
+    build: ./basket
+    ports:
+      - "8084:8084"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+
+volumes:
+  mysql-product-data:
