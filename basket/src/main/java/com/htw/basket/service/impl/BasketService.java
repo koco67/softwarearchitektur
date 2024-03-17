@@ -70,6 +70,7 @@ public class BasketService implements IBasketservice {
                 });
     }
 
+    @Override
     public String clearBasket(String session) {
         if (session != null) {
             baskets.removeIf(basket -> basket.getSessionId().equals(session));
@@ -79,6 +80,7 @@ public class BasketService implements IBasketservice {
         }
     }
 
+    @Override
     public List<Basket> getAllBaskets() {
         return baskets;
     }
