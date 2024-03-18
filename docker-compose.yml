@@ -1,44 +1,86 @@
-version: '3.8'
+version: "3.9"
 
 services:
-  mysql-product:
-    image: mysql:latest
+
+  database:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: sql11686549
       MYSQL_USER: sql11686549
       MYSQL_PASSWORD: e9JNxGrzxE
-    volumes:
-      - mysql-product-data:/var/lib/mysql
+      MYSQL_ROOT_PASSWORD: pass
+    networks:
+      - internal
 
-  gateway:
-    build: ./gateway
+  rabbitmq-container:
+    image: rabbitmq:3.11-management
+    hostname: rabbitmq-container
     ports:
-      - "8080:8080"
-    depends_on:
-      - mysql-product
-
-  product:
-    build: ./product
-    ports:
-      - "8082:8082"
-    depends_on:
-      - mysql-product
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+      RABBITMQ_DEFAULT_USER: "user"
+      RABBITMQ_DEFAULT_PASS: "user"
+    networks:
+      - internal
 
   checkout:
-    build: ./checkout
+    image: checkout
+    build:
+      context: ./checkout
+      dockerfile: Dockerfile
     ports:
       - "8083:8083"
 
-  basket:
-    build: ./basket
-    ports:
-      - "8084:8084"
-
   frontend:
-    build: ./frontend
+    image: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
 
-volumes:
-  mysql-product-data:
+  gateway:
+    image: gateway
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
+  basket:
+    image: basket
+    build:
+      context: ./basket
+      dockerfile: Dockerfile
+
+    ports:
+      - "8084:8084"
+
+  app:
+    container_name: product
+    command: java -jar target/demo-0.0.1-SNAPSHOT.jar
+    build:
+      context: ./product
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - database
+    volumes:
+      - ./:/app/app
+    links:
+      - database
+
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11686549
+      - spring_rabbitmq_host=rabbitmq
+      - spring_rabbitmq_port=5672
+  
+networks:
+  internal:
+    name: internal
