@@ -3,7 +3,6 @@ package com.htw.basket.service.interfaces;
 import com.htw.basket.model.Basket;
 import com.htw.basket.model.Product;
 
-import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 

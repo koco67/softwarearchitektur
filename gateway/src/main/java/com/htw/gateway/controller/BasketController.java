@@ -2,19 +2,13 @@ package com.htw.gateway.controller;
 
 import com.htw.gateway.entity.Basket;
 import com.htw.gateway.entity.DefaultProduct;
-import com.htw.gateway.entity.ProductDto;
 import com.htw.gateway.service.BasketService;
-import com.htw.gateway.service.ProductService;
-import jakarta.servlet.http.HttpSession;
 import reactor.core.publisher.Mono;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 @RestController

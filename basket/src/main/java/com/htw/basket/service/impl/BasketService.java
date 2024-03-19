@@ -3,7 +3,6 @@ package com.htw.basket.service.impl;
 import com.htw.basket.model.Basket;
 import com.htw.basket.model.Product;
 import com.htw.basket.service.interfaces.IBasketservice;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -1,3 +1,4 @@
+/*
 package com.htw.basket;
 
 import com.htw.basket.model.Basket;
@@ -43,3 +44,4 @@ public class BasketController {
         return basketService.getAllBaskets();
     }
 }
+*/
