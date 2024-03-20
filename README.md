@@ -1,33 +1,19 @@
-Readme
-Description
-This repository contains the necessary configuration to run the application using Docker Compose.
+## Userful Commands
+#### create a new repository on the command line
+* echo "# cbd" >> README.md
+* git init
+* git add README.md
+* git commit -m "first commit"
+* git branch -M main
+* git remote add origin https://github.com/dumketob/cbd.git
+* git push -u origin main
+#### …or push an existing repository from the command line
+* git remote add origin https://github.com/dumketob/cbd.git
+* git branch -M main
+* git push -u origin main
 
-Setup
-Prerequisites
-Docker
-Docker Compose
-
-Steps
-Clone the repository:
-
-```bash
-git clone <repository-url>
-cd <repository-directory>
-# Readme
-
-## Description
-This repository contains the necessary configuration to run the application using Docker Compose.
-
-## Setup
-
-### Prerequisites
-- Docker
-- Docker Compose
-
-### Steps
-
-1. Clone the repository:
-
-```bash
-git clone <repository-url>
-cd <repository-directory>
+### Without Docker
+#### maven build and open jar file from target
+* ./mvnw package && java -jar target/demo-0.0.1-SNAPSHOT.jar
+* mvn dependency:analyze //  find the dependencies that are not in use in our project
+* ./mvnw dependency:copy-dependencies  // in Intellij refresh maven
