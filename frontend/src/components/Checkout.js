@@ -4,8 +4,6 @@ import React, { useState, useEffect } from 'react';
 
 const Checkout = () => {
 
-  
-  const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalSum, setTotalSum] = useState([]);
@@ -26,8 +24,6 @@ const Checkout = () => {
         return response.json();
       })
       .then(data => {
-        const { products } = data;
-        setProducts(products);
         setIsLoading(false);
   
         // POST Basket to Checkout-Service and get Total in response

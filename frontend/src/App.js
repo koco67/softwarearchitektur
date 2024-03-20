@@ -5,6 +5,7 @@ import Product from "./components/Product";
 import Home from "./components/Home";
 import Basket from './components/Basket';
 import Checkout from './components/Checkout';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   //const [products, setProducts] = useState([]);

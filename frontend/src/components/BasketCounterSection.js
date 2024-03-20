@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import "./BasketCounterSection.css";
 import { BiSolidPlusCircle } from "react-icons/bi";
 import { BiSolidMinusCircle } from "react-icons/bi";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 function BasketCounterSection(props) {
+
+  const [counter, setCounter] = useState(props.currentProduct.counter);
 
   const itemToOrOffBasket = ({
     name: props.currentProduct.name,
@@ -33,6 +38,8 @@ function BasketCounterSection(props) {
         .catch(error => {
           console.error('There was a problem with your fetch operation:', error);
         });
+        setCounter(counter + 1);
+        toast.info('added to Basket!');
       };
 
       // DELETE Product from Basket
@@ -54,13 +61,16 @@ function BasketCounterSection(props) {
           // Fehlerbehandlung für Fehler beim Senden der Anfrage
           console.error('Error deleting resource:', error);
         });
+        setCounter(counter - 1);
+        toast.info('removed from basket Basket!');
       };
 
   return (
     <div className='basketCounterSection-main'>
         <button className='plus-minus-icon' onClick={deleteData}><BiSolidMinusCircle /></button>
-        <p className='item-counter-basket'>{props.currentProduct.counter}</p>
+        <p className='item-counter-basket'>{counter}</p>
         <button className='plus-minus-icon' onClick={postData}><BiSolidPlusCircle /></button>
+        <ToastContainer position="bottom-right" />
     </div>
   );
 }

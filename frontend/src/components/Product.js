@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import "./Product.css"
 import Navbar from "./Navbar";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 const Product = () => {
 
@@ -59,6 +62,9 @@ const Product = () => {
       .catch(error => {
         console.error('There was a problem with your fetch operation:', error);
       });
+
+      toast.info('added to Basket!');
+
     };
 
     return (
@@ -90,6 +96,7 @@ const Product = () => {
             <button onClick={postData}>
               Add to Basket
             </button>
+            <ToastContainer position="bottom-right" />
           </div>
           <img src={imageSrc} alt="Beschreibung des Bildes" />
         </div>
