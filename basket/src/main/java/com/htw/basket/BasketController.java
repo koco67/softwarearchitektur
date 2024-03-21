@@ -1,4 +1,4 @@
-/*
+/* only for testing purposes
 package com.htw.basket;
 
 import com.htw.basket.model.Basket;

@@ -15,6 +15,4 @@ public class Product {
     private String name;
     private String id;
     private double price;
-
-    // Konstruktor, Getter und Setter hier einfügen
 }

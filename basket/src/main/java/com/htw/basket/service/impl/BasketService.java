@@ -11,7 +11,6 @@ import java.util.List;
 @Service
 public class BasketService implements IBasketservice {
 
-    // Simulating a database for storing baskets
     private List<Basket> baskets = new ArrayList<>();
 
     @Override
