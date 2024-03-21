@@ -41,7 +41,15 @@ const Basket = () => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return (
+      <div>
+        <Navbar/>
+        Your Basket is empty
+        <Link to="/">
+        <button>Return back to Shop</button>
+      </Link>
+      </div>
+    );
   }
 
   //1:Counter einführen
@@ -74,7 +82,7 @@ const Basket = () => {
       ))}
       </ul>
       <Link to="/Checkout">
-        <button>Proceed to Checkout</button>
+        <button className='checkout-button'>Proceed to Checkout</button>
       </Link>
     </div>
   );

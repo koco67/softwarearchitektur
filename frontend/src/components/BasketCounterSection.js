@@ -44,6 +44,12 @@ function BasketCounterSection(props) {
 
       // DELETE Product from Basket
       const deleteData = () => {
+
+        if(counter-1<0) {
+          setCounter(0);
+          return toast.info('This product has already been removed from the basket');
+        }
+
         fetch('http://localhost:8080/api/gateway/basket/remove', {
           method: 'DELETE',
           headers: {

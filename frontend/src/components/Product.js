@@ -90,10 +90,7 @@ const Product = () => {
             <br></br>
             <br></br>
             <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <button onClick={postData}>
+            <button onClick={postData} className="add-to-basket-button">
               Add to Basket
             </button>
             <ToastContainer position="bottom-right" />

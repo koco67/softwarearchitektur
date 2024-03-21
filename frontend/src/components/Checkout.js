@@ -68,11 +68,14 @@ const Checkout = () => {
       <Navbar/>
       <div className="checkout-box">
         <h1>Checkout</h1>
-        The total of your sum: {totalSum}
-        <p>Choose payment method:</p>
-        <button>PayPal</button>
-        <button>Credit Card</button>
-        <button>Klarna</button>
+        <p className="total-text">The total of your sum:</p>
+        <p className="sum-text">{totalSum}</p>
+        <div className="payment-method-box">
+          <p className="choice-text">Choose payment method:</p>
+          <button className="payment-button">PayPal</button>
+          <button className="payment-button">Credit Card</button>
+          <button className="payment-button">Klarna</button>
+        </div>
       </div>
     </div>
   );

@@ -29,9 +29,11 @@ function Home() {
       <ul className="product-list">
         {products.map(product => (
           <li key={product.id} className="product-card">
-            <Link to={`/Product/${product.id}`}>{product.name}</Link>
-            <p>{product.price}$</p>
-            <img src={`${process.env.PUBLIC_URL}/publicImages/${product.name}_Card.jpg`} alt={product.name} />
+            <Link to={`/Product/${product.id}`} className='headline-of-product'>{product.name}</Link>
+            <p className='price-of-product'>{product.price}$</p>
+            <Link to={`/Product/${product.id}`}>
+              <img src={`${process.env.PUBLIC_URL}/publicImages/${product.name}_Card.jpg`} alt={product.name} className='product-image'/>
+            </Link>
           </li>
         ))}
       </ul>

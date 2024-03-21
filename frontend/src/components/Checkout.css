@@ -4,4 +4,31 @@
     background-color: lightgray;
     margin: 16px;
     border-radius: 8px;
+    padding: 16px;
+}
+
+.payment-button {
+    margin: 16px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+.payment-method-box {
+    background-color: gray;
+}
+
+.choice-text {
+    margin: 16px;
+    font-weight: bold;
+}
+
+.total-text {
+    font-weight: bold;
+}
+
+.sum-text {
+    font-weight: bold;
+    text-decoration: underline;
 }
