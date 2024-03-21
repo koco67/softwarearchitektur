@@ -22,6 +22,11 @@ services:
       - "15672:15672"
       - "5672:5672"
     environment:
+      # The location of the RabbitMQ server.  "amqp" is the protocol;
+      # "rabbitmq-container" is the hostname.  Note that there is not a guarantee
+      # that the server will start first!  Telling the pika client library
+      # to try multiple times gets around this ordering issue.
+      
       AMQP_URL: 'amqp://rabbitmq-container?connection_attempts=5&retry_delay=5'
       RABBITMQ_DEFAULT_USER: "guest"
       RABBITMQ_DEFAULT_PASS: "guest"
@@ -99,7 +104,12 @@ services:
 
     environment:
       AMQP_URL: 'amqp://rabbitmq-container?connection_attempts=5&retry_delay=5'
-
+      
+    # Run this container on a private network for this application.
+    # This is necessary for magic Docker DNS to work: other containers
+    # also running on this network will see a host name "rabbitmq"
+    # (the name of this section) and the internal port 5672, even though
+    # that's not explicitly published above.
     networks:
       - internal
 
